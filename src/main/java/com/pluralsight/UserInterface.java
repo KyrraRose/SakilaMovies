@@ -11,10 +11,11 @@ public class UserInterface {
 
 
     public static void displayMainMenu(){
-        System.out.println("\t 🍿 Welcome to Sakila Movies! 🎞️");
-        System.out.println("\t[1] Display All Actors");
-        System.out.println("\t[2] Display All Films");
-        System.out.println("\t[3] Display Films by Actor ID");
+        System.out.println("🍿 Welcome to Sakila Movies! 🎞️");
+        System.out.println("\t[1] Search Actors by Name");
+        System.out.println("\t[2] Search Films by Actor ID");
+        System.out.println("\t[3] Display All Actors");
+        System.out.println("\t[4] Display All Films");
         System.out.println("\t[0] Exit");
     }
 

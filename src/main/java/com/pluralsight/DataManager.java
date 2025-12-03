@@ -75,6 +75,28 @@ public class DataManager {
         return actors;
     }
 
+    public List<Actor> getActorByName(String name){
+        String query = "SELECT * FROM actor WHERE CONCAT(first_name,' ',last_name) LIKE ?;";
+        List<Actor> actors = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, "%"+name+"%");
+            try (ResultSet results = statement.executeQuery()) {
+                while (results.next()) {
+                    Actor actor = new Actor(
+                            results.getString("first_name"),
+                            results.getString("last_name"),
+                            results.getInt("actor_id")
+                    );
+                    actors.add(actor);
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return actors;
+    }
+
     public List<Film> getFilmByID(int actorID){
         String query = "SELECT * FROM film f JOIN film_actor fa ON fa.film_id = f.film_id WHERE fa.actor_id = ?;";
         List<Film> films = new ArrayList<>();
