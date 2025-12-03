@@ -4,12 +4,8 @@ import com.pluralsight.models.Actor;
 import com.pluralsight.models.Film;
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 public class DataManager {
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/";
@@ -77,6 +73,39 @@ public class DataManager {
             e.printStackTrace();
         }
         return actors;
+    }
+
+    public List<Film> getFilmByID(int actorID){
+        String query = "SELECT * FROM film f JOIN film_actor fa ON fa.film_id = f.film_id WHERE fa.actor_id = ?;";
+        List<Film> films = new ArrayList<>();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, actorID);
+            try (ResultSet results = statement.executeQuery()) {
+                while (results.next()) {
+                    Film film = new Film(
+                            results.getString("title"),
+                            results.getString("description"),
+                            results.getInt("film_ID"),
+                            results.getInt("release_year"),
+                            results.getInt("length")
+                    );
+                    films.add(film);
+                }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return films;
+    }
+    public void close() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }
