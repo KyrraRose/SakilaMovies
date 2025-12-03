@@ -5,14 +5,16 @@ import java.util.Scanner;
 
 public class App {
 
-    private static final String url = "jdbc:mysql://127.0.0.1:3306/";
+
 
     private static final Scanner scanner = new Scanner(System.in);
 
     private static Connection connection = null;
 
     public static void main(String[] args) {
-        loadConnection("sakila",args[0],args[1]);
+        String username = System.getenv("USER");
+        String password = System.getenv("PASS");
+        DataManager dataManager = new DataManager("northwind", username, password);
         run();
     }
     public static void run(){
@@ -69,19 +71,5 @@ public class App {
         return scanner.nextLine().trim().toUpperCase();
     }
 
-    public static void loadConnection(String database, String username, String password) {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(url + database);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-
-        try {
-            connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            System.out.println("Error when loading connection. Exiting application.");
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
 
 }
